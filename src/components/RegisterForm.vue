@@ -4,16 +4,23 @@
       <div class="card col-sm-4 offset-sm-4">
         <div class="card-body">
           <h3 class="card-title">
-            <span>Sign in</span>
-            <i class="fas fa-sign-in-alt"></i>
+            <span>Register your company</span>
           </h3>
           <div class="form-group">
               <label for="exampleInputEmail1">Email address</label>
-              <input v-model="login" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+              <input v-model="login" type="text" class="form-control"  aria-describedby="emailHelp" placeholder="Enter email">
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
-              <input  v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              <input  v-model="password" type="password" class="form-control" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Repeat password</label>
+              <input  v-model="repeatPassword" type="password" class="form-control" placeholder="Password">
+            </div>
+              <div class="form-group">
+              <label for="exampleInputPassword1">Company name</label>
+              <input  v-model="companyName" type="password" class="form-control" placeholder="Password">
             </div>
             <button class="btn btn-primary" style="margin-top:20px" @click="handleLogin()">Submit</button>
         </div>
@@ -31,7 +38,9 @@ export default {
   data() {
     return {
       login: "",
-      password: ""
+      password: "",
+      repeatPassword: "",
+      companyName: ""
     };
   },
   methods: {
