@@ -4,7 +4,7 @@
     <h3 class="text-center">Secret Startup Battles</h3>
     <hr/>
 
-    <div class="col-sm-4" v-for="battle in privateBattles">
+    <div class="col-sm-4" v-for="battle in privateBattles" :key="battle.id">
       <div class="panel panel-danger">
         <div class="panel-heading">
           <h3 class="panel-title"> {{ battle.name }} </h3>
