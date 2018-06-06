@@ -21,33 +21,28 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
       component: Home,
     },
     {
       path: '/login',
-      name: 'LoginForm',
       component: LoginForm,
     },
     {
       path: '/register',
-      name: 'RegisterForm',
       component: RegisterForm,
     },
     {
       path: '/companies/:id',
-      name: 'CompanyPage',
       component: CompanyPage,
     },
     {
       path: '/admin',
-      name: 'AdminProfile',
       component: AdminProfile,
       beforeEnter: requireAuth,
       children: [
-        { path: '/', component: Details },
-        { path: '/admin/structure', component: Structure },
-        { path: '/admin/managers', component: Managers }
+        { path: '', component: Details },
+        { path: 'structure', component: Structure },
+        { path: 'managers', component: Managers }
       ]
     },
   ],

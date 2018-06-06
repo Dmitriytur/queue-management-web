@@ -8,7 +8,7 @@ const TOKEN_ROLE_KEY = 'token_role';
 const TOKEN_SUB_KEY = 'token_sub';
 const BASE_URL = 'http://localhost:8085';
 
-
+axios.defaults.headers.common['Authorization'] = getAccessToken();
 
 
 export default function login(login, password) {

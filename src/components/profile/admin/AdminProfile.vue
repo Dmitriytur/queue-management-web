@@ -1,31 +1,29 @@
 <template>
-  <div class="container" style="margin-top: 50px">
-    <div class="row">
-      <div class="col-md-3">
-        <div class="list-group">
-          <router-link to="/admin" class="list-group-item">
+  <b-container style="margin-top: 50px">
+    <b-row>
+      <b-col md="3">
+        <b-list-group>
+          <b-list-group-item to="/admin">
             <span>Details</span>
             <i class="far fa-building float-right"></i>
-          </router-link>
-          <router-link to="/admin/structure" class="list-group-item">
+          </b-list-group-item>
+          <b-list-group-item to="/admin/structure">
             <span>Structure</span>
             <i class="fas fa-sitemap float-right"></i>
-          </router-link>
-          <router-link to="/admin/managers" class="list-group-item">
+          </b-list-group-item>
+          <b-list-group-item to="/admin/managers">
             <span>Managers</span>
             <i class="fas fa-users float-right"></i>
-          </router-link>
-        </div>
-      </div>
-      <div class="col-md-9">
+          </b-list-group-item>
+        </b-list-group>
+      </b-col>
+      <b-col md="9">
         <router-view></router-view>
-      </div>
-    </div>
-  </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
-  export default {
-
-  }
+  export default {};
 </script>

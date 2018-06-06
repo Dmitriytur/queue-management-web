@@ -1,38 +1,36 @@
 <template>
   <div style="margin-top: 20px">
     <div class="contaner">
-      <div class="card col-sm-8 offset-sm-2">
-        <div class="card-body">
-          <h3 class="card-title">
-            <span>{{company.name}}</span>
-          </h3>
-          <span>{{company.description}}</span>
-        </div>
-      </div>
+      <b-card v-bind:title="company.name" class=" col-sm-8 offset-sm-2">
+        <div v-html="company.description"></div>
+      </b-card>
     </div>
+    <b-card title="Timetable" class=" col-sm-8 offset-sm-2">
+      
+    </b-card>
   </div>
 </template>
 
 
 <script>
-import axios from "axios";
-import BASE_URL from "@/utils/api";
+  import axios from "axios";
+  import BASE_URL from "@/utils/api";
 
-export default {
-  data() {
-    return {
-      company: {}
-    };
-  },
-  mounted() {
-    axios
-      .get(BASE_URL + "/companies/" + this.$route.params.id)
-      .then(response => {
-        this.company = response.data;
-      })
-      .catch(err => {
+  export default {
+    data() {
+      return {
+        company: {},
+      };
+    },
+    mounted() {
+      axios
+        .get(BASE_URL + "/companies/" + this.$route.params.id)
+        .then(response => {
+          this.company = response.data;
+        })
+        .catch(err => {
           console.log(err);
-      });
-  }
-};
+        });
+    }
+  };
 </script>
