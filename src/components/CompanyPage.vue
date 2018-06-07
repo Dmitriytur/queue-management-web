@@ -1,11 +1,11 @@
 <template>
   <div style="margin-top: 20px">
     <div class="contaner">
-      <b-card v-bind:title="company.name" class=" col-sm-8 offset-sm-2">
+      <b-card v-bind:title="company.name" class=" col-sm-10 offset-sm-1">
         <div v-html="company.description"></div>
       </b-card>
     </div>
-    <b-card title="Timetable" class=" col-sm-8 offset-sm-2">
+    <b-card title="Timetable" class=" col-sm-10 offset-sm-1">
       <b-row>
         <b-card title="Search" class="col-md-3">
           <tree :tree-data="company.rootCategory"></tree>

@@ -12,6 +12,8 @@ import Details from "@/components/profile/admin/Details";
 import Structure from "@/components/profile/admin/Structure";
 import Managers from "@/components/profile/admin/Managers";
 
+import ManagerProfile from "@/components/profile/manager/ManagerProfile";
+
 import CompanyPage from '@/components/CompanyPage';
 
 Vue.use(Router);
@@ -45,5 +47,9 @@ export default new Router({
         { path: 'managers', component: Managers }
       ]
     },
+    {
+      path: '/manager',
+      component: ManagerProfile,
+    }
   ],
 });

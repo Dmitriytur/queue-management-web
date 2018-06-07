@@ -17,9 +17,33 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'sl-vue-tree/dist/sl-vue-tree.js'
 import * as moment from 'moment';
 
+import 'vue2-timepicker/dist/vue2-timepicker.min.js'
+
+import 'vue2-timepicker/dist/vue2-timepicker.min.css'
+
 import $ from "jquery";
 
 import { VueEditor, Quill } from 'vue2-editor'
+
+
+import VueNotifications from 'vue-notifications'
+import 'jquery'
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
+
+function toast ({title, message, type, timeout, cb}) {
+  if (type === VueNotifications.types.warn) type = 'warning'
+  return toastr[type](message, title, {timeOut: timeout})
+}
+
+const options = {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+}
+
+Vue.use(VueNotifications, options)
 
 
 Vue.config.productionTip = false

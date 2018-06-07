@@ -23,7 +23,7 @@ export function getCompanyForUser() {
 
 export function getQueuesByCategory(categoryId, startDate, endDate) {
   var url = buildUrl(BASE_URL, {
-    path: 'queue',
+    path: 'queues',
     queryParams: {
       categoryId: categoryId,
       startDate: startDate,
@@ -32,6 +32,24 @@ export function getQueuesByCategory(categoryId, startDate, endDate) {
   });
   console.log(url);
   return axios.get(url);
+}
+
+export function getQueuesByCategoryAndManager(categoryId, startDate, endDate) {
+  var url = buildUrl(BASE_URL, {
+    path: 'queues',
+    queryParams: {
+      categoryId: categoryId,
+      startDate: startDate,
+      endDate: endDate,
+      managerId: getId()
+    }
+  });
+  console.log(url);
+  return axios.get(url);
+}
+
+export function assignClient(sloteId, phoneNumber, details) {
+  return axios.put(BASE_URL + "/time-slots/" + sloteId, { phone: phoneNumber, details: details });
 }
 
 export function convertNode(categoryNode) {
