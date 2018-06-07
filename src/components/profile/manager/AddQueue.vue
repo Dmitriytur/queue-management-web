@@ -6,67 +6,96 @@
     <b-modal id="addQueueModal" title="Add queue" @ok="handleOk()">
       <b-form-group>
         <label>Name:</label>
-        <b-form-input type="text" placeholder="Queue name"></b-form-input>
+        <b-form-input v-model="name" type="text" placeholder="Queue name"></b-form-input>
+      </b-form-group>
+       <b-form-group>
+        <label>From:</label>
+        <vue-timepicker  v-model="startTime" format="HH:mm"></vue-timepicker>
+      </b-form-group>
+      <b-form-group>
+        <label>To:</label>
+        <vue-timepicker  v-model="endTime" format="HH:mm"></vue-timepicker>
+      </b-form-group>
+      <b-form-group>
+        <label>Duration (min):</label>
+        <b-form-input type="number" min="1" v-model="duration"></b-form-input>
       </b-form-group>
       <b-form-group>
         <label>Date:</label>
         <input type="text" name="dates" class="form-control pull-right">
       </b-form-group>
       <b-form-group>
-        <label>From:</label>
-        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" />
-        <div class="input-group-append" data-target="#timeFrom" data-toggle="datetimepicker">
-          <div class="input-group-text">
-            <i class="fa fa-clock-o"></i>
-          </div>
-        </div>
-      </b-form-group>
-      <b-form-group>
-        <label>To:</label>
-        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" />
-        <div class="input-group-append" data-target="#timeTo" data-toggle="datetimepicker">
-          <div class="input-group-text">
-            <i class="fa fa-clock-o"></i>
-          </div>
-        </div>
-      </b-form-group>
-      <b-form-group>
         <label>Description:</label>
-        <b-form-textarea :rows="3"></b-form-textarea>
+        <b-form-textarea  v-model="description"  :rows="3"></b-form-textarea>
       </b-form-group>
     </b-modal>
   </div>
 </template>
 
 <script>
-  import VueTimepicker from 'vue2-timepicker'
+import VueNotifications from "vue-notifications";
+import VueTimepicker from "vue2-timepicker";
+import { addQueue } from "@/utils/api";
+import EventBus from "@/utils/event-bus";
 
-  export default {
-    components: {
-      VueTimepicker
-    },
-    mounted() {
-      $('input[name="dates"]').daterangepicker(
-        {
-          singleDatePicker: true,
-          startDate: "06/01/2018",
-          endDate: "06/07/2018"
-        },
-        function (start, end, label) {
-          console.log(
-            "New date range selected: " +
-            start.format("YYYY-MM-DD") +
-            " to " +
-            end.format("YYYY-MM-DD") +
-            " (predefined range: " +
-            label +
-            ")"
-          );
-        }
-      );
-      $('#datetimepicker3').datetimepicker({
-        format: 'LT'
+export default {
+  props: ["categoryId"],
+  components: {
+    VueTimepicker
+  },
+  data() {
+    return {
+      name: "",
+      description: "",
+      date: "",
+      startTime: {
+        HH: "00",
+        mm: "00"
+      },
+      endTime: {
+        HH: "00",
+        mm: "00"
+      },
+      duration: 30
+    };
+  },
+  methods: {
+    handleOk() {
+      var start = this.date.clone().add(this.startTime.HH, 'h').add(this.startTime.mm, 'm');
+      var end = this.date.clone().add(this.endTime.HH, 'h').add(this.endTime.mm, 'm');
+      var queue = {
+        name: this.name,
+        description: this.description,
+        startTime: start.unix(),
+        endTime: end.unix(),
+        duration: this.duration,
+        categoryId: this.categoryId
+      };
+      addQueue(queue).then(response => {
+        this.showSuccessMsg();
+        this.$emit('ok');
       });
     }
-  };
+  },
+  notifications: {
+    showSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: "Success",
+      message: "Queue successfully added!"
+    }
+  },
+  mounted() {
+    EventBus.$on("dateSelected", payLoad => {
+      this.date = payLoad;
+    });
+    $('input[name="dates"]').daterangepicker(
+      {
+        singleDatePicker: true
+      },
+      function(start, end, label) {
+        EventBus.$emit("dateSelected", start);
+      }
+    );
+  }
+};
 </script>

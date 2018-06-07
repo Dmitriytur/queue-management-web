@@ -52,6 +52,12 @@ export function assignClient(sloteId, phoneNumber, details) {
   return axios.put(BASE_URL + "/time-slots/" + sloteId, { phone: phoneNumber, details: details });
 }
 
+export function addQueue(queue) {
+  queue.managerId = getId();
+  console.log(JSON.stringify(queue));
+  return axios.post(BASE_URL + "/queues", queue);
+}
+
 export function convertNode(categoryNode) {
   if (!categoryNode) {
     return {}

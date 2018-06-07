@@ -11,7 +11,7 @@
           <b-form-input v-bind:value="currentDateRange.value" readonly></b-form-input>
         </b-col>
         <b-col>
-          <add-queue></add-queue>
+          <add-queue v-bind:categoryId="categoryId" @ok="handleOk()"></add-queue>
         </b-col>
         <b-col class="text-right">
           <b-btn variant='primary' @click="moveRight()">
@@ -46,7 +46,7 @@
               <b-btn variant="success" @click="showModal(queue.id)">Info
                 <i class="fas fa-users"></i>
               </b-btn>
-              <b-modal :ref="queue.id" size="lg" title="Enroll" @ok="handleOk()">
+              <b-modal :ref="queue.id" size="lg" title="Info">
                 <manager-time-slots v-bind:slots="queue.timeSlots" @slotSelected="handleSlotSelected"></manager-time-slots>
               </b-modal>
             </td>
@@ -91,12 +91,7 @@
     },
     methods: {
       handleOk() {
-        assignClient(this.selectedSlot.id, this.slotNumber, this.slotDetails).then(
-          response => {
-            this.showSuccessMsg();
-            this.updateTable();
-          }
-        );
+         this.updateTable();
       },
       handleSlotSelected(payLoad) {
         this.selectedSlot = payLoad;
