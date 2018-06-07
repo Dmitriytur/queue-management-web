@@ -49,7 +49,7 @@ export default {
   methods: {
     save() {
       axios
-        .post(BASE_URL + "/companies/" + this.company.id, this.company)
+        .put(BASE_URL + "/companies/" + this.company.id, this.company)
         .catch(err => {
           console.log(err);
         });
