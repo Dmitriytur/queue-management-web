@@ -46,6 +46,10 @@ const options = {
 Vue.use(VueNotifications, options)
 
 
+import 'jsoneditor'
+import 'jsoneditor/dist/jsoneditor.min.css'
+
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

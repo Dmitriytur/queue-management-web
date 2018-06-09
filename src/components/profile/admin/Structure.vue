@@ -6,8 +6,9 @@
       </h3>
       <div class="form-group">
         <div class="form-group">
-          <textarea v-model="structure" class="form-control" id="exampleFormControlTextarea1" rows="20"></textarea>
+          <!-- <textarea v-model="structure" class="form-control" id="exampleFormControlTextarea1" rows="20"></textarea> -->
         </div>
+          <div id="jsoneditor" style="height:500px;"></div>
         <button class="btn btn-primary" style="margin-top:20px" @click="save()">Save</button>
       </div>
     </div>
@@ -19,43 +20,35 @@
 import axios from "axios";
 import BASE_URL from "@/utils/api";
 import { getId } from "@/utils/auth";
+import JSONEditor from "jsoneditor";
 
 export default {
   data() {
     return {
       company: {},
-      structure: ""
+      jsonEditor: {}
     };
   },
   methods: {
     save() {
-      if (this.structure != "") {
-        var rootCategory = JSON.parse(this.structure);
-        axios
-          .put(
-            BASE_URL + "/companies/" + this.company.id + "/root-category",
-            rootCategory
-          )
-          .then(response => {
-            this.loadData();
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
+      this.company.rootCategory.options = this.jsonEditor.get();
+      axios
+        .put(
+          BASE_URL + "/companies/" + this.company.id + "/root-category",
+          this.company.rootCategory
+        )
+        .then(response => {
+          this.loadData();
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     loadData() {
       axios
         .get(BASE_URL + "/users/" + getId() + "/company")
         .then(response => {
-          if (response.data.rootCategory != null) {
-            this.structure = JSON.stringify(
-              response.data.rootCategory,
-              null,
-              4
-            );
-          }
-          response.data.rootCategory = null;
+          this.jsonEditor.set(response.data.rootCategory.options);
           this.company = response.data;
         })
         .catch(err => {
@@ -65,6 +58,30 @@ export default {
   },
   mounted() {
     this.loadData();
+    var container = document.getElementById("jsoneditor");
+    var options = {
+      templates: [
+        {
+          text: "Category",
+          title: "Insert new category",
+          value: {
+            value: "",
+            options: []
+          }
+        }
+      ]
+    };
+    this.jsonEditor = new JSONEditor(container, options);
+    var json = {
+      options: [
+        {
+          value: "",
+          options: []
+        }
+      ]
+    };
+    this.jsonEditor.set([]);
+    this.jsonEditor.expandAll();
   }
 };
 </script>

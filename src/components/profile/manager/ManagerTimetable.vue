@@ -106,7 +106,7 @@
           .add(this.offset, "w");
         this.endDate = moment()
           .isoWeekday(7)
-          .startOf("day")
+          .endOf('day')
           .add(this.offset, "w");
         this.currentDateRange.value =
           this.startDate.format("L") + " - " + this.endDate.format("L");
