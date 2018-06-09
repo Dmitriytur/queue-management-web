@@ -58,6 +58,11 @@ export function addQueue(queue) {
   return axios.post(BASE_URL + "/queues", queue);
 }
 
+
+export function sendNotification(queueId, message) {
+  return axios.post(BASE_URL + "/queues/" + queueId + "/notifications", message, { headers: { "Content-Type": "text/plain" } });
+}
+
 export function convertNode(categoryNode) {
   if (!categoryNode) {
     return {}

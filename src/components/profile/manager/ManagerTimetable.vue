@@ -43,17 +43,15 @@
             <td>{{queue.endTime}}</td>
             <td>{{queue.duration}}m</td>
             <td>
-              <b-btn variant="success" @click="showModal(queue.id)">Info
+              <b-btn variant="success" @click="showModal('slots' + queue.id)">Info
                 <i class="fas fa-users"></i>
               </b-btn>
-              <b-modal :ref="queue.id" size="lg" title="Info">
+              <b-modal :ref="'slots' + queue.id" size="lg" title="Info">
                 <manager-time-slots v-bind:slots="queue.timeSlots" @slotSelected="handleSlotSelected"></manager-time-slots>
               </b-modal>
             </td>
             <td>
-              <b-btn variant="info">Notify
-                <i class="fas fa-envelope"></i>
-              </b-btn>
+              <notification v-bind:queueId="queue.id"></notification>
             </td>
           </tr>
         </tbody>
@@ -65,93 +63,97 @@
 </template>
 
 <script>
-  import VueNotifications from 'vue-notifications'
-  import EventBus from "@/utils/event-bus";
-  import { getQueuesByCategoryAndManager, assignClient } from "@/utils/api";
-  import ManagerTimeSlots from "@/components/profile/manager/ManagerTimeSlots";
-  import AddQueue from "./AddQueue";
+import VueNotifications from "vue-notifications";
+import EventBus from "@/utils/event-bus";
+import { getQueuesByCategoryAndManager, assignClient } from "@/utils/api";
+import ManagerTimeSlots from "@/components/profile/manager/ManagerTimeSlots";
+import AddQueue from "./AddQueue";
+import Notification from "./Notification";
 
-  export default {
-    components: {
-      ManagerTimeSlots,
-      AddQueue
+export default {
+  components: {
+    ManagerTimeSlots,
+    AddQueue,
+    Notification
+  },
+  data() {
+    return {
+      startDate: {},
+      endDate: {},
+      offset: 0,
+      queues: [],
+      categoryId: "",
+      selectedSlot: {},
+      currentDateRange: {},
+      slotNumber: "",
+      slotDetails: ""
+    };
+  },
+  methods: {
+    handleOk() {
+      this.updateTable();
     },
-    data() {
-      return {
-        startDate: {},
-        endDate: {},
-        offset: 0,
-        queues: [],
-        categoryId: "",
-        selectedSlot: {},
-        currentDateRange: {},
-        slotNumber: "",
-        slotDetails: ""
-      };
+    handleSlotSelected(payLoad) {
+      this.selectedSlot = payLoad;
     },
-    methods: {
-      handleOk() {
-         this.updateTable();
-      },
-      handleSlotSelected(payLoad) {
-        this.selectedSlot = payLoad;
-      },
-      showModal(id) {
-        this.$refs[id]["0"].show();
-      },
-      updateTime() {
-        this.startDate = moment()
-          .isoWeekday(1)
-          .startOf("day")
-          .add(this.offset, "w");
-        this.endDate = moment()
-          .isoWeekday(7)
-          .endOf('day')
-          .add(this.offset, "w");
-        this.currentDateRange.value =
-          this.startDate.format("L") + " - " + this.endDate.format("L");
-      },
-      updateTable() {
-        getQueuesByCategoryAndManager(this.categoryId, this.startDate, this.endDate).then(
-          response => {
-            this.queues = response.data.map(q => this.formatQueueTime(q));
-          }
-        );
-      },
-      moveRight() {
-        this.offset += 1;
-        this.updateTime();
-        this.updateTable();
-      },
-      moveLeft() {
-        this.offset -= 1;
-        this.updateTime();
-        this.updateTable();
-      },
-      formatQueueTime(queue) {
-        queue.dayOfWeek = moment(queue.startTime).format("dddd");
-        queue.startTime = moment(queue.startTime).format("LT");
-        queue.endTime = moment(queue.endTime).format("LT");
-        return queue;
-      }
+    showModal(ref) {
+      this.$refs[ref]["0"].show();
     },
-    notifications: {
-      showSuccessMsg: {
-        type: VueNotifications.types.success,
-        title: "Success",
-        message: "You successfully enrolled to queue!"
-      }
+    updateTime() {
+      this.startDate = moment()
+        .isoWeekday(1)
+        .startOf("day")
+        .add(this.offset, "w");
+      this.endDate = moment()
+        .isoWeekday(7)
+        .endOf("day")
+        .add(this.offset, "w");
+      this.currentDateRange.value =
+        this.startDate.format("L") + " - " + this.endDate.format("L");
     },
-    mounted() {
-      EventBus.$on("leafSelected", payLoad => {
-        getQueuesByCategoryAndManager(payLoad, this.startDate, this.endDate).then(
-          response => {
-            this.categoryId = payLoad;
-            this.queues = response.data.map(q => this.formatQueueTime(q));
-          }
-        );
+    updateTable() {
+      getQueuesByCategoryAndManager(
+        this.categoryId,
+        this.startDate,
+        this.endDate
+      ).then(response => {
+        this.queues = response.data.map(q => this.formatQueueTime(q));
       });
+    },
+    moveRight() {
+      this.offset += 1;
       this.updateTime();
+      this.updateTable();
+    },
+    moveLeft() {
+      this.offset -= 1;
+      this.updateTime();
+      this.updateTable();
+    },
+    formatQueueTime(queue) {
+      queue.dayOfWeek = moment(queue.startTime).format("dddd");
+      queue.startTime = moment(queue.startTime).format("LT");
+      queue.endTime = moment(queue.endTime).format("LT");
+      return queue;
     }
-  };
+  },
+  notifications: {
+    showSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: "Success",
+      message: "You successfully enrolled to queue!"
+    }
+  },
+  mounted() {
+    EventBus.$on("leafSelected", payLoad => {
+      getQueuesByCategoryAndManager(payLoad, this.startDate, this.endDate).then(
+        response => {
+          this.categoryId = payLoad;
+          this.queues = response.data.map(q => this.formatQueueTime(q));
+        }
+      );
+    });
+    this.updateTime();
+  }
+};
 </script>
