@@ -8,7 +8,7 @@
           </b-btn>
         </b-col>
         <b-col class="text-center">
-          <b-form-input v-bind:value="currentDateRange.value" readonly></b-form-input>
+          <b-form-input style="width:210px" v-bind:value="currentDateRange.value" readonly></b-form-input>
         </b-col>
         <b-col>
           <add-queue v-bind:categoryId="categoryId" @ok="handleOk()"></add-queue>
