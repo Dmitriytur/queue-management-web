@@ -35,6 +35,7 @@ import axios from "axios";
 import BASE_URL from "@/utils/api";
 import { getId } from "@/utils/auth";
 import $ from "jquery";
+import VueNotifications from "vue-notifications";
 
 export default {
   components: {
@@ -49,7 +50,9 @@ export default {
   methods: {
     save() {
       axios
-        .put(BASE_URL + "/companies/" + this.company.id, this.company)
+        .put(BASE_URL + "/companies/" + this.company.id, this.company).then(response => {
+          this.showInfoMsg();
+        })
         .catch(err => {
           console.log(err);
         });
@@ -83,6 +86,13 @@ export default {
     $(function() {
       $('[data-toggle="popover"]').popover();
     });
+  },
+  notifications: {
+    showInfoMsg: {
+      type: VueNotifications.types.info,
+      title: "Success",
+      message: "Saved"
+    }
   }
 };
 </script>

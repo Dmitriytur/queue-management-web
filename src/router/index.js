@@ -16,6 +16,9 @@ import ManagerProfile from "@/components/profile/manager/ManagerProfile";
 
 import CompanyPage from '@/components/CompanyPage';
 
+import RegisterByToken from '@/components/RegisterByToken';
+
+
 Vue.use(Router);
 
 export default new Router({
@@ -50,6 +53,10 @@ export default new Router({
     {
       path: '/manager',
       component: ManagerProfile,
+    },
+    {
+      path: '/register-link/:tokenId',
+      component: RegisterByToken,
     }
   ],
 });

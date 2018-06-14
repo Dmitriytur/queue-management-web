@@ -11,7 +11,8 @@
         <tbody>
           <tr v-for="manager in managers" :key="manager.id">
             <td>{{manager.login}}</td>
-            <td class="greenText">Yes</td>
+            <td class="redText" v-if="!manager.activated">No</td>
+            <td class="greenText" v-if="manager.activated">Yes</td>
           </tr>
         </tbody>
       </table>
@@ -22,41 +23,44 @@
 </template>
 
 <script>
-  import { getManagersForActiveAdmin, getCompanyForUser } from "@/utils/api";
-  import AddManager from '@/components/profile/admin/AddManager'
+import { getManagersForActiveAdmin, getCompanyForUser } from "@/utils/api";
+import AddManager from "@/components/profile/admin/AddManager";
 
-  export default {
-    components: {
-      AddManager
-    },
-    data() {
-      return {
-        managers: [],
-        company: {}
-      };
-    },
-    methods: {
-      loadManagers() {
-        getManagersForActiveAdmin()
-          .then(response => {
-            this.managers = response.data;
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-    },
-    mounted() {
-      this.loadManagers();
-      getCompanyForUser().then(response => {
-        this.company = response.data;
-      });
+export default {
+  components: {
+    AddManager
+  },
+  data() {
+    return {
+      managers: [],
+      company: {}
+    };
+  },
+  methods: {
+    loadManagers() {
+      getManagersForActiveAdmin()
+        .then(response => {
+          this.managers = response.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
-  };
+  },
+  mounted() {
+    this.loadManagers();
+    getCompanyForUser().then(response => {
+      this.company = response.data;
+    });
+  }
+};
 </script>
 
 <style>
-  .greenText {
-    color: green;
-  }
+.greenText {
+  color: green;
+}
+.redText {
+  color: red;
+}
 </style>

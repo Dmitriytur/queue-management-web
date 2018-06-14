@@ -24,8 +24,8 @@
 
 
 <script>
-import TimePicker from "@/components/TimePicker";
-import doLogin from "@/utils/auth";
+import VueNotifications from "vue-notifications";
+import login from "@/utils/auth";
 
 export default {
   data() {
@@ -36,7 +36,18 @@ export default {
   },
   methods: {
     handleLogin() {
-      doLogin(this.login, this.password);
+      login(this.login, this.password).catch(err => {
+        if (err.response.status === 403) {
+          this.showAuthErrorMsg();
+        }
+      });
+    }
+  },
+  notifications: {
+    showAuthErrorMsg: {
+      type: VueNotifications.types.error,
+      title: "Error",
+      message: "Wrong login or password"
     }
   }
 };

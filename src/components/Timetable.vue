@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import VueNotifications from 'vue-notifications'
+import VueNotifications from "vue-notifications";
 import EventBus from "@/utils/event-bus";
 import { getQueuesByCategory, assignClient } from "@/utils/api";
 import TimeSlots from "@/components/TimeSlots";
@@ -87,12 +87,16 @@ export default {
   },
   methods: {
     handleOk() {
-      assignClient(this.selectedSlot.id, this.slotNumber, this.slotDetails).then(
-        response => {
+      assignClient(this.selectedSlot.id, this.slotNumber, this.slotDetails)
+        .then(response => {
           this.showSuccessMsg();
           this.updateTable();
-        }
-      );
+          this.slotNumber = "",
+          this.slotDetails = ""
+        })
+        .catch(err => {  
+          this.showErrorMsg({ message: err.response.data });
+        });
     },
     handleSlotSelected(payLoad) {
       this.selectedSlot = payLoad;
@@ -107,7 +111,7 @@ export default {
         .add(this.offset, "w");
       this.endDate = moment()
         .isoWeekday(7)
-        .endOf('day')
+        .endOf("day")
         .add(this.offset, "w");
       this.currentDateRange.value =
         this.startDate.format("L") + " - " + this.endDate.format("L");
@@ -141,6 +145,11 @@ export default {
       type: VueNotifications.types.success,
       title: "Success",
       message: "You successfully enrolled to queue!"
+    },
+    showErrorMsg: {
+      type: VueNotifications.types.error,
+      title: "Error",
+      message: "Error!"
     }
   },
   mounted() {

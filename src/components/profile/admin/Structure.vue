@@ -21,6 +21,7 @@ import axios from "axios";
 import BASE_URL from "@/utils/api";
 import { getId } from "@/utils/auth";
 import JSONEditor from "jsoneditor";
+import VueNotifications from "vue-notifications";
 
 export default {
   data() {
@@ -39,6 +40,7 @@ export default {
         )
         .then(response => {
           this.loadData();
+          this.showInfoMsg();
         })
         .catch(err => {
           console.log(err);
@@ -82,6 +84,13 @@ export default {
     };
     this.jsonEditor.set([]);
     this.jsonEditor.expandAll();
+  },
+   notifications: {
+    showInfoMsg: {
+      type: VueNotifications.types.info,
+      title: "Success",
+      message: "Saved"
+    }
   }
 };
 </script>
