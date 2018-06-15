@@ -30,7 +30,6 @@ export function getQueuesByCategory(categoryId, startDate, endDate) {
       endDate: endDate
     }
   });
-  console.log(url);
   return axios.get(url);
 }
 
@@ -44,7 +43,6 @@ export function getQueuesByCategoryAndManager(categoryId, startDate, endDate) {
       managerId: getId()
     }
   });
-  console.log(url);
   return axios.get(url);
 }
 
@@ -54,7 +52,6 @@ export function assignClient(sloteId, phoneNumber, details) {
 
 export function addQueue(queue) {
   queue.managerId = getId();
-  console.log(JSON.stringify(queue));
   return axios.post(BASE_URL + "/queues", queue);
 }
 
@@ -76,4 +73,13 @@ export function convertNode(categoryNode) {
     label: categoryNode.value,
     children: children
   }
+}
+
+
+export function getUserByToken(tokenId) {
+  return axios.get(BASE_URL + "/register-tokens/" + tokenId + "/user");
+}
+
+export function registerByToken(tokenId, password) {
+  return axios.put(BASE_URL + "/register-tokens/" + tokenId, password, { headers: { "Content-Type": "text/plain" } });
 }

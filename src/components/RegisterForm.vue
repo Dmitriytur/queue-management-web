@@ -65,7 +65,7 @@ export default {
       axios
         .post(BASE_URL + "/users/sign-up", registerData)
         .then(response => {
-          this.$router.push("/");
+          this.$router.push("/register-success");
         })
         .catch(err => {
           console.log(err.response.status);

@@ -17,6 +17,7 @@ import ManagerProfile from "@/components/profile/manager/ManagerProfile";
 import CompanyPage from '@/components/CompanyPage';
 
 import RegisterByToken from '@/components/RegisterByToken';
+import RegisteredMessage from '@/components/RegisteredMessage';
 
 
 Vue.use(Router);
@@ -57,6 +58,10 @@ export default new Router({
     {
       path: '/register-link/:tokenId',
       component: RegisterByToken,
+    },
+    {
+      path: '/register-success',
+      component: RegisteredMessage,
     }
   ],
 });
